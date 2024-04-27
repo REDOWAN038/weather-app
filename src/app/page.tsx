@@ -2,7 +2,9 @@
 
 import Container from "@/components/Container"
 import NavBar from "@/components/NavBar"
+import WeatherIcon from "@/components/WeatherIcon"
 import { convertKelvinToCelsius } from "@/utils/convertKelvinToCelsius"
+import { getDayOrNightIcon } from "@/utils/getDayOrNightIcon"
 import axios from "axios"
 import { format } from "date-fns"
 import parseISO from "date-fns/parseISO"
@@ -88,8 +90,8 @@ export default function Home() {
     <div className='flex flex-col gap-4 bg-gray-100 min-h-screen'>
       <NavBar />
       <main className='px-3 max-w-7xl mx-auto flex flex-col gap-9 w-full pb-10 pt-4'>
-        <section>
-          <div>
+        <section className='space-y-4 '>
+          <div className='space-y-2'>
             <h2 className='flex gap-1 text-2xl items-end'>
               <p>{format(parseISO(today?.dt_txt ?? ""), "EEEE")}</p>
               <p className='text-lg'>
@@ -118,6 +120,22 @@ export default function Home() {
                     °↑
                   </span>
                 </p>
+              </div>
+              <div className='flex gap-10 sm:gap-16 overflow-x-auto w-full justify-between pr-3'>
+                {data?.list.map((d, i) => (
+                  <div
+                    key={i}
+                    className='flex flex-col justify-between items-center gap-2 text-xs font-semibold'
+                  >
+                    <p className='whitespace-nowrap'>
+                      {format(parseISO(d.dt_txt), "h:mm a")}
+                    </p>
+                    <WeatherIcon
+                      iconName={getDayOrNightIcon(d.weather[0].icon, d.dt_txt)}
+                    />
+                    <p>{convertKelvinToCelsius(d?.main.temp ?? 0)}°</p>
+                  </div>
+                ))}
               </div>
             </Container>
           </div>
