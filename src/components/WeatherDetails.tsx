@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react"
 import { LuEye, LuSunrise, LuSunset } from "react-icons/lu"
 import { FiDroplet } from "react-icons/fi"
@@ -27,7 +29,7 @@ export default function WeatherDetails(props: WeatherDetailProps) {
     <>
       <SingleWeatherDetail
         icon={<LuEye />}
-        information='Visibility'
+        information='visibility'
         value={visibility}
       />
       <SingleWeatherDetail
@@ -37,7 +39,7 @@ export default function WeatherDetails(props: WeatherDetailProps) {
       />
       <SingleWeatherDetail
         icon={<MdAir />}
-        information='Wind Speed'
+        information='Wind speed'
         value={windSpeed}
       />
       <SingleWeatherDetail
