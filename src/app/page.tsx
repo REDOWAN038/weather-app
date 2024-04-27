@@ -2,9 +2,12 @@
 
 import Container from "@/components/Container"
 import NavBar from "@/components/NavBar"
+import WeatherDetails from "@/components/WeatherDetails"
 import WeatherIcon from "@/components/WeatherIcon"
 import { convertKelvinToCelsius } from "@/utils/convertKelvinToCelsius"
+import { convertWindSpeed } from "@/utils/convertWindSpeed"
 import { getDayOrNightIcon } from "@/utils/getDayOrNightIcon"
+import { metersToKiloMeters } from "@/utils/metersToKiloMetters"
 import axios from "axios"
 import { format } from "date-fns"
 import parseISO from "date-fns/parseISO"
@@ -71,7 +74,7 @@ export default function Home() {
     "repoData",
     async () => {
       const { data } = await axios.get(
-        `https://api.openweathermap.org/data/2.5/forecast?q=dhaka&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}&cnt=56`
+        `https://api.openweathermap.org/data/2.5/forecast?q=sylhet&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}&cnt=56`
       )
       return data
     }
@@ -139,8 +142,34 @@ export default function Home() {
               </div>
             </Container>
           </div>
+
+          <div className=' flex gap-4'>
+            <Container className='w-fit justify-center flex-col px-4 items-center '>
+              <p className=' capitalize text-center'>
+                {today?.weather[0].description}
+              </p>
+              <WeatherIcon
+                iconName={getDayOrNightIcon(
+                  today?.weather[0].icon ?? "",
+                  today?.dt_txt ?? ""
+                )}
+              />
+            </Container>
+            <Container className='bg-yellow-300/80 px-6 gap-4 justify-between overflow-x-auto'>
+              <WeatherDetails
+                visibility={metersToKiloMeters(today?.visibility ?? 10000)}
+                airPressure={`${today?.main.pressure} hPa`}
+                humidity={`${today?.main.humidity}%`}
+                sunrise={format(data?.city.sunrise ?? 1702949452, "H:mm")}
+                sunset={format(data?.city.sunset ?? 1702517657, "H:mm")}
+                windSpeed={convertWindSpeed(today?.wind.speed ?? 1.64)}
+              />
+            </Container>
+          </div>
         </section>
-        <section></section>
+        <section className='flex flex-col w-full gap-4'>
+          <p className='text-2xl'>Forcast (7 days)</p>
+        </section>
       </main>
     </div>
   )
